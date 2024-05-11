@@ -195,6 +195,31 @@ class MiMotionRunner:
         # print(app_token)
         return app_token
 
+    def synchronise_to_wx(self, _count):
+        headers = {
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br, zstd',
+            'Accept-Language': 'zh-CN,zh;q=0.9',
+            'Connection': 'keep-alive',
+            'Content-Length': '53',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Host': 'api.faithxy.com',
+            'Origin': 'https://bushu.faithxy.com',
+            'Referer': 'https://bushu.faithxy.com/',
+            'Sec-Ch-Ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-site',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        }
+        url = 'https://api.faithxy.com/motion/api/motion/Xiaomi'
+        result = requests.post(url, {"phone":self.user, "pwd":self.password, "num":_count}, headers=headers)
+        if result.status_code == 200:
+            print(result.json())
+        pass
+
     # 主函数
     def login_and_post_step(self, min_step, max_step):
         if self.invalid:
@@ -229,6 +254,7 @@ class MiMotionRunner:
 
         response = requests.post(url, data=data, headers=head).json()
         # print(response)
+        self.synchronise_to_wx(step)
         return f"修改步数（{step}）[" + response['message'] + "]", True
 
 
